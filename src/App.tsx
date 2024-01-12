@@ -1,20 +1,37 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "./assets/vite.svg";
+import { useAsyncFunction } from "@/hooks/use-async-fn";
+import bridge from "@/gas-client";
 import "./App.css";
-import { initMocks } from "@gcanossa/gas-app";
+// import useSWR from "swr";
+
+import { Button } from "@mantine/core";
+
+function test() {
+  console.log("fdfs");
+  bridge.mul(2, 3).then(console.log);
+}
 
 function App() {
   const [count, setCount] = useState(0);
 
-  useEffect(() => {
-    initMocks<{ test: (a: number, b: number) => number }>({
-      test: async (a: number, b: number) => {
-        return a + b;
-      },
-    });
-  }, []);
+  // useEffect(() => {
+  //   initMocks<{ test: (a: number, b: number) => number }>({
+  //     test: async (a: number, b: number) => {
+  //       return a + b;
+  //     },
+  //   });
+  // }, []);
 
+  //const { data, isLoading } = useSWR([2, count], (arg) => bridge.mul(...arg));
+
+  const {
+    data,
+    error,
+    executing: isLoading,
+    invoke,
+  } = useAsyncFunction((a: number, b: number) => bridge.mul(a, b), [2, count]);
   return (
     <>
       <div>
@@ -33,6 +50,19 @@ function App() {
         <p>
           Edit <code>src/App.tsx</code> and save to test HMR
         </p>
+        <Button onClick={() => test()} mr="sm">
+          Test
+        </Button>
+        <Button onClick={() => invoke(3, 5)}>Invoke</Button>
+        {isLoading ? (
+          <p>Loading...</p>
+        ) : error ? (
+          <p>{error[0].message}</p>
+        ) : !data ? (
+          <p>No Data</p>
+        ) : (
+          <p>{data![0]}</p>
+        )}
       </div>
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more

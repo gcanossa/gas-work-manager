@@ -1,10 +1,9 @@
 import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
-import { gasApp } from "@gcanossa/gas-app/dist/vite-gas-plugin";
+import tsconfigPaths from "vite-tsconfig-paths";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), gasApp()],
+  plugins: [tsconfigPaths()],
   build: {
     outDir: "dist",
     rollupOptions: {
