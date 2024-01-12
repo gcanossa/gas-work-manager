@@ -4,5 +4,7 @@ import mocks from "@/app-mock";
 
 mocks;
 
-const bridge = createGasAppBridge<appAPI>("appInvoke");
+const bridge = (window as any).google
+  ? createGasAppBridge<appAPI>("appInvoke")
+  : null;
 export default bridge;
