@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 
 function test() {
   console.log("fdfs");
-  bridge.mul(2, 3).then(console.log);
+  bridge!.mul(2, 3).then(console.log);
 }
 
 function App() {
@@ -28,7 +28,7 @@ function App() {
     error,
     executing: isLoading,
     invoke,
-  } = useAsyncFunction((a: number, b: number) => bridge.mul(a, b), [2, count]);
+  } = useAsyncFunction((a: number, b: number) => bridge!.mul(a, b), [2, count]);
 
   return (
     <>
