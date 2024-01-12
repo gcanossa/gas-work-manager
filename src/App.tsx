@@ -3,10 +3,7 @@ import reactLogo from "./assets/react.svg";
 import viteLogo from "./assets/vite.svg";
 import { useAsyncFunction } from "@/hooks/use-async-fn";
 import bridge from "@/gas-client";
-import "./App.css";
-// import useSWR from "swr";
-
-import { Button } from "@mantine/core";
+import { Button } from "@/components/ui/button";
 
 function test() {
   console.log("fdfs");
@@ -32,6 +29,7 @@ function App() {
     executing: isLoading,
     invoke,
   } = useAsyncFunction((a: number, b: number) => bridge.mul(a, b), [2, count]);
+
   return (
     <>
       <div>
@@ -50,10 +48,10 @@ function App() {
         <p>
           Edit <code>src/App.tsx</code> and save to test HMR
         </p>
-        <Button onClick={() => test()} mr="sm">
-          Test
+        <Button onClick={() => test()}>Test</Button>
+        <Button onClick={() => invoke(3, 5)} className="ml-2">
+          Invoke
         </Button>
-        <Button onClick={() => invoke(3, 5)}>Invoke</Button>
         {isLoading ? (
           <p>Loading...</p>
         ) : error ? (
