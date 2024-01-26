@@ -1,5 +1,6 @@
 import { createGasApp } from "@gcanossa/gas-app/server";
 import appConfig from "./app";
+import { organizationModel } from "./model";
 
 const app = createGasApp(appConfig);
 export type appAPI = typeof appConfig;
