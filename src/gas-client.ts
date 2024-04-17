@@ -1,10 +1,10 @@
-import { createGasAppBridge } from "@gcanossa/gas-app";
-import { type appAPI } from "@server";
-import mocks from "@/app-mock";
+import { createScopedClient } from "@gasstack/rpc";
+import { type ServerApiType } from "@server";
+import mocks from "@/gas-mock";
 
 mocks;
 
-const bridge = (window as any).google
-  ? createGasAppBridge<appAPI>("appInvoke")
+const client = window.google
+  ? createScopedClient<ServerApiType>("appInvoke")
   : null;
-export default bridge;
+export default client;

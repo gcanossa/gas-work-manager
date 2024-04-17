@@ -1,10 +1,8 @@
+import { ServerRunMethods } from "@gasstack/rpc";
+import { createClient } from "./actions/clients";
+
 const app = {
-  sum(a: number, b: number) {
-    return a + b;
-  },
-  mul(a: number, b: number) {
-    return a * b;
-  },
-};
+  createClient,
+} satisfies ServerRunMethods;
 
 export default app;

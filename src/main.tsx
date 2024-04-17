@@ -3,20 +3,21 @@ import ReactDOM from "react-dom/client";
 import "./global.css";
 import App from "./App.tsx";
 import { createHashRouter, RouterProvider } from "react-router-dom";
-import bridge from "@/gas-client";
+import client from "@/gas-client";
 import Invoice from "./pages/invoice.tsx";
 import TimeTracker from "./pages/time-tracker.tsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { type GoogleClientApi } from "@gcanossa/gas-app";
-import { type appAPI } from "@server";
+import { type ClientApi } from "@gasstack/rpc";
+import { type ServerApiType } from "@server";
+import NewClient from "./pages/new-client.tsx";
 declare global {
   interface Window {
     initialRoute: string | null;
-    google: GoogleClientApi<appAPI>;
+    google: ClientApi<ServerApiType>;
   }
 }
 
-if (bridge) {
+if (client) {
   const router = createHashRouter([
     {
       path: "/",
@@ -25,6 +26,10 @@ if (bridge) {
         {
           path: "invoice",
           element: <Invoice />,
+        },
+        {
+          path: "new-client",
+          element: <NewClient />,
         },
         {
           path: "time-tracker",

@@ -1,25 +1,26 @@
-import { createGasApp } from "@gcanossa/gas-app/server";
-import appConfig from "./app";
-import { organizationModel } from "./model";
+import { createEndpoint } from "@gasstack/rpc";
+import serverApi from "./app";
 
-const app = createGasApp(appConfig);
-export type appAPI = typeof appConfig;
+const endpoint = createEndpoint(serverApi);
+export type ServerApiType = typeof serverApi;
 
-export function appInvoke(name: string, ...params: any[]): any {
-  return app.invoke(name, ...params);
+export function appInvoke(fnName: string, ...params: any[]): any {
+  return endpoint.invoke(fnName, ...params);
 }
 
 export function onOpen() {
   var ui = SpreadsheetApp.getUi();
 
   ui.createMenu("Partita IVA")
-    .addItem("Carica Fattura Emessa", "loadEmittedInvoice_view")
+    .addItem("Nuovo Cliente", "view_newClient")
     .addToUi();
 }
 
-export function loadEmittedInvoice_view() {
+export function view_newClient() {
   var template = HtmlService.createTemplateFromFile("ui/app/index");
 
-  var html = template.evaluate().setWidth(500).setHeight(400);
-  SpreadsheetApp.getUi().showModalDialog(html, "Aggiungi");
+  template.initialRoute = "new-client";
+
+  var html = template.evaluate().setWidth(500);
+  SpreadsheetApp.getUi().showSidebar(html);
 }

@@ -16,15 +16,19 @@
 
     /* Linting */
     "strict": true,
+    // disabled in order to allow @gasstack/rpc mapping
+    "strictFunctionTypes": false,
+
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "@server": ["./server"]
+      "@server/*": ["./server/*"],
+      "@model/*": ["./model/*"]
     }
   },
-  "include": ["src"],
+  "include": ["src", "server", "model"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

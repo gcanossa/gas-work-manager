@@ -11,9 +11,9 @@ function App() {
   }, []);
 
   return (
-    <>
+    <div className="container box-border py-3">
       <Outlet />
-    </>
+    </div>
   );
 }
 
