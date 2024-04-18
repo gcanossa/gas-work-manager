@@ -3,9 +3,7 @@
   <head>
     <script>
       try {
-        window.initialRoute = eval(
-          '<?= initialRoute ? `"${initialRoute}"` : "undefined" ?>"',
-        );
+        window.initialRoute = eval('<?= initialRoute ? `"${initialRoute}"` : "undefined" ?>');
       } catch {}
     </script>
     <meta charset="UTF-8" />

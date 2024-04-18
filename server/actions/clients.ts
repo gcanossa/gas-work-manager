@@ -5,12 +5,7 @@ import { DriveFoldersNames, SettingsKeys } from "@model/types";
 import { organizationCtx, settingsCtx } from "@server/contexts";
 
 export function createClient(obj: NewOrganizationType) {
-  const newClient = insertAt(
-    organizationCtx,
-    obj,
-    count(organizationCtx),
-    true,
-  )[0];
+  const newClient = insertAt(organizationCtx, obj, 0)[0];
 
   const settings = read(settingsCtx);
 
@@ -23,13 +18,9 @@ export function createClient(obj: NewOrganizationType) {
     (p) => p.getName() === DriveFoldersNames.Clients,
   );
 
-  const newFolder = clientsFolder?.addFolder(
-    DriveApp.createFolder(`${newClient.id}_${newClient.name}`),
-  );
+  const newFolder = clientsFolder?.createFolder(`${newClient.name}`);
 
-  newFolder?.addFolder(DriveApp.createFolder(DriveFoldersNames.Contracts));
-  newFolder?.addFolder(DriveApp.createFolder(DriveFoldersNames.Projects));
-  newFolder?.addFolder(
-    DriveApp.createFolder(DriveFoldersNames.EmittedInvoices),
-  );
+  newFolder?.createFolder(DriveFoldersNames.Contracts);
+  newFolder?.createFolder(DriveFoldersNames.Projects);
+  newFolder?.createFolder(DriveFoldersNames.EmittedInvoices);
 }

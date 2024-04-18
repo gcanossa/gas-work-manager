@@ -1,11 +1,4 @@
-import {
-  numeric,
-  text,
-  serial,
-  formula,
-  hyperLink,
-  dateTime,
-} from "@gasstack/db";
+import { numeric, serial, hyperLink, dateTime } from "@gasstack/db";
 
 export const receivedInvoiceModel = {
   id: serial(numeric(0)),

@@ -1,4 +1,4 @@
-import { setupMocks, delayedSuccess } from "@gasstack/rpc";
+import { setupMocks, delayedSuccess, delayedFailure } from "@gasstack/rpc";
 import { NewOrganizationType } from "@model/organization";
 
 const mocks = import.meta.env.DEV
@@ -7,7 +7,7 @@ const mocks = import.meta.env.DEV
       {
         appInvoke: {
           async createClient(obj: NewOrganizationType) {
-            await delayedSuccess([500, 2000]);
+            await delayedFailure([500, 2000], Error("Errore generico"));
             console.log(obj);
           },
         },

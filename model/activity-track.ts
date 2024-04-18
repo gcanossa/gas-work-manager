@@ -1,11 +1,4 @@
-import {
-  numeric,
-  text,
-  serial,
-  formula,
-  hyperLink,
-  dateTime,
-} from "@gasstack/db";
+import { numeric, text, serial, formula, dateTime } from "@gasstack/db";
 
 export const activityTrackModel = {
   id: serial(numeric(0)),

@@ -1,11 +1,4 @@
-import {
-  numeric,
-  text,
-  serial,
-  formula,
-  hyperLink,
-  dateTime,
-} from "@gasstack/db";
+import { numeric, text, serial, formula } from "@gasstack/db";
 
 export const serviceModel = {
   id: serial(numeric(0)),
