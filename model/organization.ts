@@ -1,4 +1,11 @@
-import { numeric, text, serial, RowObject } from "@gasstack/db";
+import {
+  numeric,
+  text,
+  serial,
+  RowObject,
+  hyperLink,
+  Link,
+} from "@gasstack/db";
 import { z } from "zod";
 
 export const organizationModel = {
@@ -10,15 +17,22 @@ export const organizationModel = {
   province: text(5),
   country: text(6),
   vatNumber: text(7),
+  driveFolder: hyperLink(8),
 };
 
 export const organizationSchema = z.object({
   name: z.string().min(2, {
     message: "Username must be at least 2 characters.",
   }),
-  address: z.string().min(2, {
-    message: "Address must be at least 2 characters.",
-  }),
+  address: z
+    .string()
+    .min(2, {
+      message: "Address must be at least 2 characters.",
+    })
+    .regex(/^.+,.+$/, {
+      message:
+        "Address must have a comma (,) separating street name and number",
+    }),
   zipCode: z.string().length(5, {
     message: "ZipCode must be 5 characters.",
   }),
@@ -37,4 +51,6 @@ export const organizationSchema = z.object({
 });
 
 export type OrganizationType = RowObject<typeof organizationModel>;
-export type NewOrganizationType = z.infer<typeof organizationSchema>;
+export type NewOrganizationType = z.infer<typeof organizationSchema> & {
+  driveFolder: Link;
+};

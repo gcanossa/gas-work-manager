@@ -5,8 +5,6 @@ import { DriveFoldersNames, SettingsKeys } from "@model/types";
 import { organizationCtx, settingsCtx } from "@server/contexts";
 
 export function createClient(obj: NewOrganizationType) {
-  const newClient = insertAt(organizationCtx, obj, 0)[0];
-
   const settings = read(settingsCtx);
 
   const driveId = settings.find(
@@ -18,7 +16,13 @@ export function createClient(obj: NewOrganizationType) {
     (p) => p.getName() === DriveFoldersNames.Clients,
   );
 
-  const newFolder = clientsFolder?.createFolder(`${newClient.name}`);
+  const newFolder = clientsFolder?.createFolder(`${obj.name}`);
+
+  obj.driveFolder = {
+    url: `https://drive.google.com/drive/folders/${newFolder?.getId()}`,
+    label: "Cartella",
+  };
+  const newClient = insertAt(organizationCtx, obj, 0, true)[0];
 
   newFolder?.createFolder(DriveFoldersNames.Contracts);
   newFolder?.createFolder(DriveFoldersNames.Projects);
