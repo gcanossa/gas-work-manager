@@ -28,3 +28,7 @@ export function createClient(obj: NewOrganizationType) {
   newFolder?.createFolder(DriveFoldersNames.Projects);
   newFolder?.createFolder(DriveFoldersNames.EmittedInvoices);
 }
+
+export function getClients() {
+  return read(organizationCtx);
+}

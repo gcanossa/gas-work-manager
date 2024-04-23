@@ -1,6 +1,6 @@
 import { Input } from "@/components/ui/input";
 
-const TimeTracker: React.FC = () => {
+const TrackTime: React.FC = () => {
   return (
     <>
       <h1>Time Tracker</h1>
@@ -9,4 +9,4 @@ const TimeTracker: React.FC = () => {
   );
 };
 
-export default TimeTracker;
+export default TrackTime;

@@ -1,15 +1,16 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./global.css";
-import App from "./App.tsx";
+import App from "./App";
 import { createHashRouter, RouterProvider } from "react-router-dom";
 import client from "@/gas-client";
-import Invoice from "./pages/invoice.tsx";
-import TimeTracker from "./pages/time-tracker.tsx";
+import NewInvoice from "./pages/new-invoice";
+import TrackTime from "./pages/track-time";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { type ClientApi } from "@gasstack/rpc";
 import { type ServerApiType } from "@server";
 import NewClient from "./pages/new-client.tsx";
+import NewProject from "./pages/new-project";
 declare global {
   interface Window {
     initialRoute: string | null;
@@ -24,16 +25,20 @@ if (client) {
       element: <App />,
       children: [
         {
-          path: "invoice",
-          element: <Invoice />,
+          path: "new-invoice",
+          element: <NewInvoice />,
         },
         {
           path: "new-client",
           element: <NewClient />,
         },
         {
-          path: "time-tracker",
-          element: <TimeTracker />,
+          path: "new-project",
+          element: <NewProject />,
+        },
+        {
+          path: "track-time",
+          element: <TrackTime />,
         },
       ],
     },

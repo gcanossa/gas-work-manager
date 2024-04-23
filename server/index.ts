@@ -16,11 +16,15 @@ export function onOpen() {
     .addToUi();
 }
 
-export function view_newClient() {
+function viewOpenReact(route?: string) {
   var template = HtmlService.createTemplateFromFile("ui/app/index");
 
-  template.initialRoute = "new-client";
+  template.initialRoute = route ?? undefined;
 
-  var html = template.evaluate().setWidth(500);
+  var html = template.evaluate();
   SpreadsheetApp.getUi().showSidebar(html);
+}
+
+export function view_newClient() {
+  viewOpenReact("new-client");
 }
