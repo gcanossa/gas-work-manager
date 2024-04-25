@@ -34,7 +34,7 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({ clients }) => {
           <FormItem>
             <FormLabel>Nome</FormLabel>
             <FormControl>
-              <Input {...field} placeholder="Nome del cliente" />
+              <Input {...field} placeholder="Nome del progetto" />
             </FormControl>
             <FormDescription></FormDescription>
             <FormMessage />

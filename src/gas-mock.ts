@@ -1,11 +1,7 @@
 import { setupMocks, delayedSuccess, delayedFailure } from "@gasstack/rpc";
 import { NewOrganizationType } from "@model/organization";
 import { NewProjectType } from "@model/project";
-import {
-  NewServiceEnumType,
-  NewServiceType,
-  ServiceEnumType,
-} from "@model/service";
+import { NewServiceType, ServiceEnumType } from "@model/service";
 
 const serviceTypes: ServiceEnumType[] = [
   { name: "Prova" },

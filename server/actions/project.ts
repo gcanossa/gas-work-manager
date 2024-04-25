@@ -1,4 +1,4 @@
-import { count, insertAt, read } from "@gasstack/db";
+import { insertAt, read } from "@gasstack/db";
 import { getFolders } from "@gasstack/fs";
 import { NewProjectType } from "@model/project";
 import { NewServiceType } from "@model/service";
