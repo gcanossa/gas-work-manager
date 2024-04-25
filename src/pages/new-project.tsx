@@ -2,16 +2,39 @@ import { EditForm } from "@/components/shared/edit-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { NewProjectType, projectSchema } from "@model/project";
 import { useFieldArray, useForm } from "react-hook-form";
+import {
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import client from "@/gas-client";
 import { useQuery } from "@tanstack/react-query";
 import { ProjectForm } from "@/components/shared/project-form";
-import { SubServiceForm } from "@/components/shared/sub-service-form";
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { PlusIcon } from "@radix-ui/react-icons";
+import { Cross2Icon, PlusIcon } from "@radix-ui/react-icons";
+import { z } from "zod";
+import { serviceSchema } from "@model/service";
+import { useEffect } from "react";
+import { Spinner } from "@/components/shared/spinner";
+
+const newProjectServiceSchema = serviceSchema.omit({ projectId: true });
+type NewProjectService = z.infer<typeof newProjectServiceSchema>;
+
+const schema = projectSchema.extend({
+  services: z
+    .array(newProjectServiceSchema)
+    .nonempty("Scegli almeno un servizio"),
+});
+
+type NewProjectFormType = NewProjectType & { services: NewProjectService[] };
 
 export const NewProject: React.FC = () => {
-  const form = useForm<NewProjectType>({
-    resolver: zodResolver(projectSchema),
+  const form = useForm<NewProjectFormType>({
+    resolver: zodResolver(schema),
     defaultValues: {
       name: "",
     },
@@ -31,13 +54,23 @@ export const NewProject: React.FC = () => {
     queryFn: async () => (await client!.getServiceTypes())[0],
   });
 
+  useEffect(() => {
+    if (!!serviceTypes.data) {
+      for (let item of serviceTypes.data.filter(
+        (p) => !serviceArray.fields.find((t) => t.type === p.name),
+      )) {
+        serviceArray.append({ type: item.name, hourlyRate: 0 });
+      }
+    }
+  }, [serviceTypes.data]);
+
   return (
     <>
       <h1>Nuovo Progetto</h1>
 
       <EditForm
         form={form}
-        onSave={async (newProject: NewProjectType) => {
+        onSave={async (newProject: NewProjectFormType) => {
           await client!.createProject(newProject);
 
           setTimeout(() => window.google.script.host.close(), 2000);
@@ -50,29 +83,63 @@ export const NewProject: React.FC = () => {
           clients={{ isPending: clients.isPending, data: clients.data }}
         />
         <Button
+          disabled={serviceTypes.isPending}
           type="button"
           onClick={() =>
             serviceArray.prepend({
-              id: 0,
               type: "",
-              projectId: 0,
               hourlyRate: 0,
             })
           }
         >
-          <PlusIcon />
+          {serviceTypes.isPending ? <Spinner className="mr-2" /> : <PlusIcon />}
           Aggiungi Servizio
         </Button>
+        {serviceTypes.isPending && <Spinner />}
         {serviceArray.fields.map((field, index) => (
-          <SubServiceForm
-            index={index}
-            key={field.id}
-            addServiceType={async (data) => {
-              await client!.createServiceType(data);
-              await serviceTypes.refetch();
-            }}
-            serviceTypes={serviceTypes}
-          />
+          <div key={field.id} className="flex w-full space-x-2 items-center">
+            <FormField
+              control={form.control}
+              name={`services.${index}.type`}
+              render={({ field }) => (
+                <FormItem className="grow">
+                  <FormLabel>Tipo</FormLabel>
+                  <FormControl>
+                    <Input {...field} placeholder="Tipo di Servizio" />
+                  </FormControl>
+                  <FormDescription></FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name={`services.${index}.hourlyRate`}
+              render={({ field }) => (
+                <FormItem className="grow">
+                  <FormLabel>Tariffa Oraria</FormLabel>
+                  <FormControl>
+                    <div className="flex space-x-2">
+                      <Input
+                        type="number"
+                        {...field}
+                        placeholder="Tariffa oraria"
+                      />
+                      <Button
+                        type="button"
+                        variant="destructive"
+                        onClick={() => serviceArray.remove(index)}
+                      >
+                        <Cross2Icon />
+                      </Button>
+                    </div>
+                  </FormControl>
+                  <FormDescription></FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
         ))}
       </EditForm>
     </>

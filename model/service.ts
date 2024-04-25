@@ -29,7 +29,7 @@ export const serviceSchema = z.object({
   projectId: z.number().positive({
     message: "Project id must be positive.",
   }),
-  hourlyRate: z.number().positive({
+  hourlyRate: z.coerce.number().positive({
     message: "Hourly rate must be positive.",
   }),
 });

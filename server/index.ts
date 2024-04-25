@@ -13,6 +13,7 @@ export function onOpen() {
 
   ui.createMenu("Partita IVA")
     .addItem("Nuovo Cliente", "view_newClient")
+    .addItem("Nuovo Progetto", "view_newProject")
     .addToUi();
 }
 
@@ -27,4 +28,8 @@ function viewOpenReact(route?: string) {
 
 export function view_newClient() {
   viewOpenReact("new-client");
+}
+
+export function view_newProject() {
+  viewOpenReact("new-project");
 }

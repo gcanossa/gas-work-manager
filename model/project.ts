@@ -5,10 +5,8 @@ import {
   formula,
   hyperLink,
   RowObject,
-  Link,
 } from "@gasstack/db";
 import { z } from "zod";
-import { serviceSchema } from "@model/service";
 
 export const projectModel = {
   id: serial(numeric(0)),
@@ -25,13 +23,6 @@ export const projectSchema = z.object({
   clientId: z.coerce.number().int().positive({
     message: "Project id must be positive.",
   }),
-  services: z
-    .array(
-      serviceSchema.extend({
-        id: z.number(),
-      }),
-    )
-    .nonempty("Scegli almeno un servizio"),
 });
 
 export type ProjectType = RowObject<typeof projectModel>;

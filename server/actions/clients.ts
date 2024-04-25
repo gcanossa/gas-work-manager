@@ -1,4 +1,4 @@
-import { count, insertAt, read } from "@gasstack/db";
+import { insertAt, read } from "@gasstack/db";
 import { NewOrganizationType, OrganizationType } from "@model/organization";
 import { getFolders } from "@gasstack/fs";
 import { DriveFoldersNames, SettingsKeys } from "@model/types";

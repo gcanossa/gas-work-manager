@@ -1,8 +1,11 @@
 import { setupMocks, delayedSuccess, delayedFailure } from "@gasstack/rpc";
 import { NewOrganizationType } from "@model/organization";
 import { NewProjectType } from "@model/project";
-import { NewServiceEnumType, ServiceEnumType } from "@model/service";
-import { createServiceType } from "@server/actions/services";
+import {
+  NewServiceEnumType,
+  NewServiceType,
+  ServiceEnumType,
+} from "@model/service";
 
 const serviceTypes: ServiceEnumType[] = [
   { name: "Prova" },
@@ -54,17 +57,17 @@ const mocks = import.meta.env.DEV
             await delayedFailure([500, 2000], Error("Errore generico"));
             console.log(obj);
           },
-          async createProject(obj: NewProjectType) {
+          async createProject(
+            obj: NewProjectType & {
+              services: Omit<NewServiceType, "projectId">[];
+            },
+          ) {
             await delayedSuccess([500, 2000]);
             console.log(obj);
           },
           async getServiceTypes() {
             await delayedSuccess([500, 2000]);
             return serviceTypes;
-          },
-          async createServiceType(type: NewServiceEnumType) {
-            await delayedSuccess([500, 2000]);
-            serviceTypes.unshift(type);
           },
         },
       },
