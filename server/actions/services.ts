@@ -1,7 +1,11 @@
 import { count, insertAt, read } from "@gasstack/db";
 import { getFolders } from "@gasstack/fs";
 import { NewProjectType } from "@model/project";
-import { ServiceEnumType, ServiceType } from "@model/service";
+import {
+  NewServiceEnumType,
+  ServiceEnumType,
+  ServiceType,
+} from "@model/service";
 import { DriveFoldersNames, SettingsKeys } from "@model/types";
 import { organizationCtx, settingsCtx } from "@server/contexts";
 
@@ -31,3 +35,5 @@ export function getServiceTypes(): ServiceEnumType[] {
   // newFolder?.createFolder(DriveFoldersNames.Projects);
   // newFolder?.createFolder(DriveFoldersNames.EmittedInvoices);
 }
+
+export function createServiceType(type: NewServiceEnumType) {}

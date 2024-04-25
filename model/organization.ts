@@ -51,6 +51,4 @@ export const organizationSchema = z.object({
 });
 
 export type OrganizationType = RowObject<typeof organizationModel>;
-export type NewOrganizationType = z.infer<typeof organizationSchema> & {
-  driveFolder: Link;
-};
+export type NewOrganizationType = z.infer<typeof organizationSchema>;

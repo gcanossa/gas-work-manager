@@ -52,9 +52,9 @@ export function EditForm<T extends Record<string, any>>({
             <AlertError error={error} />
           )
         ) : (
-          <div className="flex">
+          <div className="flex space-x-2">
             <Button type="submit" disabled={mutation.isPending}>
-              {mutation.isPending && <Spinner />}
+              {mutation.isPending && <Spinner className="mr-3" />}
               {saveText ?? "Salva"}
             </Button>
             <Button

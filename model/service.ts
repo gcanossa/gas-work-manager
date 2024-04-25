@@ -16,14 +16,14 @@ export type NewServiceEnumType = z.infer<typeof serviceEnumSchema>;
 
 export const serviceModel = {
   id: serial(numeric(0)),
-  name: text(1),
+  type: text(1),
   projectId: numeric(2),
   clientName: formula(text(3)),
   hourlyRate: numeric(4),
 };
 
 export const serviceSchema = z.object({
-  name: z.string().min(2, {
+  type: z.string().min(2, {
     message: "Service must be at least 2 characters.",
   }),
   projectId: z.number().positive({

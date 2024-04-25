@@ -1,6 +1,14 @@
 import { setupMocks, delayedSuccess, delayedFailure } from "@gasstack/rpc";
 import { NewOrganizationType } from "@model/organization";
 import { NewProjectType } from "@model/project";
+import { NewServiceEnumType, ServiceEnumType } from "@model/service";
+import { createServiceType } from "@server/actions/services";
+
+const serviceTypes: ServiceEnumType[] = [
+  { name: "Prova" },
+  { name: "Nessuno" },
+  { name: "Altro" },
+];
 
 const mocks = import.meta.env.DEV
   ? setupMocks(
@@ -52,7 +60,11 @@ const mocks = import.meta.env.DEV
           },
           async getServiceTypes() {
             await delayedSuccess([500, 2000]);
-            return [{ name: "Prova" }, { name: "Nessuno" }, { name: "Altro" }];
+            return serviceTypes;
+          },
+          async createServiceType(type: NewServiceEnumType) {
+            await delayedSuccess([500, 2000]);
+            serviceTypes.unshift(type);
           },
         },
       },

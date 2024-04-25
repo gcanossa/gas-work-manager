@@ -11,6 +11,7 @@ import { type ClientApi } from "@gasstack/rpc";
 import { type ServerApiType } from "@server";
 import NewClient from "./pages/new-client.tsx";
 import NewProject from "./pages/new-project";
+import { Toaster } from "@/components/ui/sonner";
 declare global {
   interface Window {
     initialRoute: string | null;
@@ -50,6 +51,7 @@ if (client) {
     <React.StrictMode>
       <QueryClientProvider client={queryClient}>
         <RouterProvider router={router} />
+        <Toaster />
       </QueryClientProvider>
     </React.StrictMode>,
   );

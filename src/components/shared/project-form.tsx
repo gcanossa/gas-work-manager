@@ -17,11 +17,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { NewProjectType } from "@model/project";
 import { OrganizationType } from "@model/organization";
-import { UseQueryResult } from "@tanstack/react-query";
-import { Spinner } from "@/components/shared/spinner";
 
 export type ProjectFormProps = {
-  clients: UseQueryResult<OrganizationType[]>;
+  clients: { isPending: boolean; data: OrganizationType[] | undefined };
 };
 
 export const ProjectForm: React.FC<ProjectFormProps> = ({ clients }) => {
@@ -38,7 +36,7 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({ clients }) => {
             <FormControl>
               <Input {...field} placeholder="Nome del cliente" />
             </FormControl>
-            <FormDescription>Nome del cliente</FormDescription>
+            <FormDescription></FormDescription>
             <FormMessage />
           </FormItem>
         )}
@@ -68,7 +66,7 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({ clients }) => {
                   ))}
               </SelectContent>
             </Select>
-            <FormDescription>Cliente del progetto</FormDescription>
+            <FormDescription></FormDescription>
             <FormMessage />
           </FormItem>
         )}
