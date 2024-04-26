@@ -41,7 +41,9 @@ export function createProject(
   const newFolder = clientEntityFolders
     .find((p) => p.getName() === DriveFoldersNames.Projects)!
     .createFolder(`${obj.name}`);
-  projectsFolder!.createShortcut(newFolder.getId());
+  projectsFolder!
+    .createShortcut(newFolder.getId())
+    .setName(`${clientEntity!.name}_${obj.name}`);
 
   const newProject = insertAt(
     projectCtx,
@@ -60,7 +62,12 @@ export function createProject(
 
   for (let item of obj.services) {
     if (!serviceEnum.find((p) => p === item.type)) {
-      insertAt(serviceEnumCtx, { name: item.type }, serviceEnum.length);
+      insertAt(
+        serviceEnumCtx,
+        { name: item.type },
+        serviceEnum.length - 1,
+        true,
+      );
       serviceEnum.push(item.type);
     }
 
