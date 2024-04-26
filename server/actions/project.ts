@@ -54,15 +54,14 @@ export function createProject(
       },
     },
     0,
-    true,
   )[0];
 
   const serviceEnum = read(serviceEnumCtx).map((p) => p.name);
 
   for (let item of obj.services) {
     if (!serviceEnum.find((p) => p === item.type)) {
+      insertAt(serviceEnumCtx, { name: item.type }, serviceEnum.length);
       serviceEnum.push(item.type);
-      insertAt(serviceEnumCtx, { name: item.type }, 0, true);
     }
 
     insertAt(
@@ -73,7 +72,6 @@ export function createProject(
         projectId: newProject.id,
       },
       0,
-      true,
     );
   }
 }

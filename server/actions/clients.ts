@@ -27,7 +27,7 @@ export function createClient(obj: NewOrganizationType) {
     url: `https://drive.google.com/drive/folders/${newFolder?.getId()}`,
     label: "Cartella",
   };
-  const newClient = insertAt(organizationCtx, newObj, 0, true)[0];
+  const newClient = insertAt(organizationCtx, newObj, 0)[0];
 
   newFolder?.createFolder(DriveFoldersNames.Contracts);
   newFolder?.createFolder(DriveFoldersNames.Projects);
