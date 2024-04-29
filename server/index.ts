@@ -14,6 +14,7 @@ export function onOpen() {
   ui.createMenu("Partita IVA")
     .addItem("Nuovo Cliente", "view_newClient")
     .addItem("Nuovo Progetto", "view_newProject")
+    .addItem("Rendiconta Attività", "view_trackActivity")
     .addToUi();
 }
 
@@ -32,4 +33,8 @@ export function view_newClient() {
 
 export function view_newProject() {
   viewOpenReact("new-project");
+}
+
+export function view_trackActivity() {
+  viewOpenReact("track-activity");
 }

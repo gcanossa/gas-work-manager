@@ -24,7 +24,7 @@ export const OrganizationForm: React.FC = () => {
             <FormControl>
               <Input {...field} placeholder="Nome del cliente" />
             </FormControl>
-            <FormDescription>Nome del cliente</FormDescription>
+            <FormDescription></FormDescription>
             <FormMessage />
           </FormItem>
         )}
@@ -38,7 +38,7 @@ export const OrganizationForm: React.FC = () => {
             <FormControl>
               <Input {...field} placeholder="Indirizzo del cliente" />
             </FormControl>
-            <FormDescription>Indirizzo del cliente</FormDescription>
+            <FormDescription></FormDescription>
             <FormMessage />
           </FormItem>
         )}
@@ -52,7 +52,7 @@ export const OrganizationForm: React.FC = () => {
             <FormControl>
               <Input {...field} placeholder="CAP del cliente" />
             </FormControl>
-            <FormDescription>CAP del cliente</FormDescription>
+            <FormDescription></FormDescription>
             <FormMessage />
           </FormItem>
         )}
@@ -66,7 +66,7 @@ export const OrganizationForm: React.FC = () => {
             <FormControl>
               <Input {...field} placeholder="Città del cliente" />
             </FormControl>
-            <FormDescription>Città del cliente</FormDescription>
+            <FormDescription></FormDescription>
             <FormMessage />
           </FormItem>
         )}
@@ -80,7 +80,7 @@ export const OrganizationForm: React.FC = () => {
             <FormControl>
               <Input {...field} placeholder="Sigla della provincia" />
             </FormControl>
-            <FormDescription>Sigla della provincia</FormDescription>
+            <FormDescription></FormDescription>
             <FormMessage />
           </FormItem>
         )}
@@ -94,7 +94,7 @@ export const OrganizationForm: React.FC = () => {
             <FormControl>
               <Input {...field} placeholder="Sigla dello stato" />
             </FormControl>
-            <FormDescription>Sigla dello stato</FormDescription>
+            <FormDescription></FormDescription>
             <FormMessage />
           </FormItem>
         )}
@@ -108,7 +108,7 @@ export const OrganizationForm: React.FC = () => {
             <FormControl>
               <Input {...field} placeholder="P.IVA del cliente" />
             </FormControl>
-            <FormDescription>P.IVA del cliente</FormDescription>
+            <FormDescription></FormDescription>
             <FormMessage />
           </FormItem>
         )}

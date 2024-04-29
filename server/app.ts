@@ -1,13 +1,17 @@
 import { ServerRunMethods } from "@gasstack/rpc";
 import { createClient, getClients } from "@server/actions/clients";
-import { createProject } from "@server/actions/project";
-import { getServiceTypes } from "@server/actions/services";
+import { createProject, getProjects } from "@server/actions/project";
+import { getServiceTypes, getServices } from "@server/actions/services";
+import { trackActivity } from "@server/actions/activity";
 
 const app = {
   createClient,
   getClients,
   createProject,
+  getProjects,
   getServiceTypes,
+  getServices,
+  trackActivity,
 } satisfies ServerRunMethods;
 
 export default app;

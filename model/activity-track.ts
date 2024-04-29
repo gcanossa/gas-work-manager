@@ -1,4 +1,12 @@
-import { numeric, text, serial, formula, dateTime } from "@gasstack/db";
+import {
+  numeric,
+  text,
+  serial,
+  formula,
+  dateTime,
+  RowObject,
+} from "@gasstack/db";
+import { z } from "zod";
 
 export const activityTrackModel = {
   id: serial(numeric(0)),
@@ -11,5 +19,32 @@ export const activityTrackModel = {
   start: dateTime(7),
   end: dateTime(8),
   multiplier: numeric(9),
-  hourlyRate: numeric(10),
+  hourlyRate: formula(numeric(10)),
 };
+
+export const activityTrackSchema = z
+  .object({
+    projectId: z.coerce.number().positive({
+      message: "Project is required",
+    }),
+    serviceId: z.coerce.number().positive({
+      message: "Service is required",
+    }),
+    description: z.string().min(10, {
+      message: "Description must be at least 10 character long.",
+    }),
+    start: z.string().refine((p) => !isNaN(new Date(p).getTime()), {
+      message: "Invalid date",
+    }),
+    end: z.string().refine((p) => !isNaN(new Date(p).getTime()), {
+      message: "Invalid date",
+    }),
+    multiplier: z.coerce.number().positive().int().default(1),
+  })
+  .refine((val) => new Date(val.end) > new Date(val.start), {
+    message: "End must be greater than start",
+    path: ["end"],
+  });
+
+export type ActivityTrackType = RowObject<typeof activityTrackModel>;
+export type NewActivityTrackType = z.infer<typeof activityTrackSchema>;

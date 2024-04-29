@@ -5,7 +5,7 @@ import App from "./App";
 import { createHashRouter, RouterProvider } from "react-router-dom";
 import client from "@/gas-client";
 import NewInvoice from "./pages/new-invoice";
-import TrackTime from "./pages/track-time";
+import TrackActivity from "./pages/track-activity.tsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { type ClientApi } from "@gasstack/rpc";
 import { type ServerApiType } from "@server";
@@ -38,8 +38,8 @@ if (client) {
           element: <NewProject />,
         },
         {
-          path: "track-time",
-          element: <TrackTime />,
+          path: "track-activity",
+          element: <TrackActivity />,
         },
       ],
     },

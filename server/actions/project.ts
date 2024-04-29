@@ -82,3 +82,7 @@ export function createProject(
     );
   }
 }
+
+export function getProjects() {
+  return read(projectCtx);
+}
