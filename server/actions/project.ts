@@ -1,4 +1,4 @@
-import { insertAt, read } from "@gasstack/db";
+import { count, insertAt, read } from "@gasstack/db";
 import { getFolders } from "@gasstack/fs";
 import { NewProjectType } from "@model/project";
 import { NewServiceType } from "@model/service";
@@ -45,6 +45,7 @@ export function createProject(
     .createShortcut(newFolder.getId())
     .setName(`${clientEntity!.name}_${obj.name}`);
 
+  const newProjectIndex = count(projectCtx);
   const newProject = insertAt(
     projectCtx,
     {
@@ -55,8 +56,9 @@ export function createProject(
         label: "Cartella",
       },
     },
-    0,
-  )[0];
+    newProjectIndex - 1,
+    true,
+  )[newProjectIndex];
 
   const serviceEnum = read(serviceEnumCtx).map((p) => p.name);
 
@@ -78,7 +80,8 @@ export function createProject(
         hourlyRate: item.hourlyRate,
         projectId: newProject.id,
       },
-      0,
+      count(serviceCtx) - 1,
+      true,
     );
   }
 }

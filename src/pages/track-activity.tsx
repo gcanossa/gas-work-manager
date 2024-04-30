@@ -19,6 +19,7 @@ export const TrackActivity: React.FC = () => {
       description: "",
       start: "",
       end: "",
+      billable: true,
       multiplier: 1,
     },
   });

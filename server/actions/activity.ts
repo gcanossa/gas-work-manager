@@ -1,4 +1,4 @@
-import { insertAt, read } from "@gasstack/db";
+import { count, insertAt, read } from "@gasstack/db";
 import { NewActivityTrackType } from "@model/activity-track";
 import { projectCtx, activityCtx, roundCtx } from "@server/contexts";
 
@@ -12,7 +12,8 @@ export function trackActivity(obj: NewActivityTrackType) {
   let currentRound = rounds.find(
     (p) => p.clientId === project!.clientId && !p.end,
   );
-  if (!currentRound)
+  if (!currentRound) {
+    const newRoundIndex = count(roundCtx);
     currentRound = insertAt(
       roundCtx,
       {
@@ -21,8 +22,10 @@ export function trackActivity(obj: NewActivityTrackType) {
         end: null,
         status: "",
       },
-      0,
-    )[0];
+      newRoundIndex - 1,
+      true,
+    )[newRoundIndex];
+  }
 
   insertAt(
     activityCtx,
@@ -33,8 +36,10 @@ export function trackActivity(obj: NewActivityTrackType) {
       description: obj.description,
       start: new Date(obj.start),
       end: new Date(obj.end),
+      billable: obj.billable,
       multiplier: obj.multiplier,
     },
-    0,
+    count(activityCtx) - 1,
+    true,
   );
 }

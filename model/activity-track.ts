@@ -5,6 +5,7 @@ import {
   formula,
   dateTime,
   RowObject,
+  boolean,
 } from "@gasstack/db";
 import { z } from "zod";
 
@@ -19,7 +20,8 @@ export const activityTrackModel = {
   start: dateTime(7),
   end: dateTime(8),
   multiplier: numeric(9),
-  hourlyRate: formula(numeric(10)),
+  billable: boolean(10),
+  hourlyRate: formula(numeric(11)),
 };
 
 export const activityTrackSchema = z
@@ -39,6 +41,7 @@ export const activityTrackSchema = z
     end: z.string().refine((p) => !isNaN(new Date(p).getTime()), {
       message: "Invalid date",
     }),
+    billable: z.boolean(),
     multiplier: z.coerce.number().positive().int().default(1),
   })
   .refine((val) => new Date(val.end) > new Date(val.start), {

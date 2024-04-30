@@ -18,6 +18,7 @@ import { Input } from "@/components/ui/input";
 import { NewActivityTrackType } from "@model/activity-track";
 import { ProjectType } from "@model/project";
 import { ServiceType } from "@model/service";
+import { Checkbox } from "@/components/ui/checkbox";
 
 export type ActivityTrackFormProps = {
   projects: { isPending: boolean; data: ProjectType[] | undefined };
@@ -149,6 +150,25 @@ export const ActivityTrackForm: React.FC<ActivityTrackFormProps> = ({
                 placeholder="Fine dell'attività"
               />
             </FormControl>
+            <FormDescription></FormDescription>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+      <FormField
+        control={form.control}
+        name="billable"
+        render={({ field }) => (
+          <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+            <FormControl>
+              <Checkbox
+                checked={field.value}
+                onCheckedChange={(checked) => {
+                  return field.onChange(checked);
+                }}
+              />
+            </FormControl>
+            <FormLabel className="text-sm font-normal">Fatturabile</FormLabel>
             <FormDescription></FormDescription>
             <FormMessage />
           </FormItem>
