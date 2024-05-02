@@ -157,6 +157,24 @@ export const ActivityTrackForm: React.FC<ActivityTrackFormProps> = ({
       />
       <FormField
         control={form.control}
+        name="multiplier"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Moltiplicatore</FormLabel>
+            <FormControl>
+              <Input
+                type="number"
+                {...field}
+                placeholder="Moltiplicatore tariffa"
+              />
+            </FormControl>
+            <FormDescription></FormDescription>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+      <FormField
+        control={form.control}
         name="billable"
         render={({ field }) => (
           <FormItem className="flex flex-row items-start space-x-3 space-y-0">

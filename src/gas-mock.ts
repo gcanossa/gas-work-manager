@@ -3,7 +3,6 @@ import { NewActivityTrackType } from "@model/activity-track";
 import { NewOrganizationType } from "@model/organization";
 import { NewProjectType } from "@model/project";
 import { NewServiceType, ServiceEnumType } from "@model/service";
-import { trackActivity } from "@server/actions/activity";
 
 const serviceTypes: ServiceEnumType[] = [
   { name: "Prova" },
@@ -84,6 +83,39 @@ const mocks = import.meta.env.DEV
           async trackActivity(obj: NewActivityTrackType) {
             await delayedSuccess([500, 2000]);
             console.log(obj);
+          },
+          async getRounds() {
+            await delayedSuccess([500, 2000]);
+            return [
+              {
+                id: 1,
+                clientId: 1,
+                clientName: "uno",
+                start: new Date().toISOString(),
+                end: new Date().toISOString(),
+                status: "Attivo",
+              },
+            ];
+          },
+          async getRoundTotalAmount(roundId: number) {
+            await delayedSuccess([500, 2000]);
+            return 1234.53;
+          },
+          async getRoundActivities(roundId: number) {
+            await delayedSuccess([500, 2000]);
+            return [
+              {
+                id: 1,
+                clientName: "Cliente",
+                serviceName: "Servizio",
+                description: "Descrizione di cosa è stato fatto",
+                start: new Date().toISOString(),
+                end: new Date().toISOString(),
+                multiplier: 1,
+                billable: true,
+                hourlyRate: 10,
+              },
+            ];
           },
         },
       },

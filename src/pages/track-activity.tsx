@@ -1,6 +1,5 @@
 import { EditForm } from "@/components/shared/edit-form";
 import client from "@/gas-client";
-import { Input } from "@/components/ui/input";
 import { useQuery } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -39,12 +38,16 @@ export const TrackActivity: React.FC = () => {
 
       <EditForm
         form={form}
-        onSave={async (activity: NewActivityTrackType) => {
+        onSave={async (activity: NewActivityTrackType, control) => {
           await client!.trackActivity(activity);
 
-          setTimeout(() => window.google.script.host.close(), 2000);
+          setTimeout(() => {
+            control.setSaved(false);
+            form.resetField("start");
+            form.resetField("end");
+          }, 1500);
         }}
-        onCancel={async () => window.google.script.host.close()}
+        onCancel={async () => form.reset()}
         saveText="Registra"
         successText="Attività registrata con successo."
       >

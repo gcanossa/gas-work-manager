@@ -1,4 +1,12 @@
-import { numeric, serial, formula, hyperLink, dateTime } from "@gasstack/db";
+import {
+  numeric,
+  serial,
+  formula,
+  hyperLink,
+  dateTime,
+  RowObject,
+} from "@gasstack/db";
+import { z } from "zod";
 
 export const emittedInvoiceModel = {
   id: serial(numeric(0)),
@@ -16,3 +24,18 @@ export const emittedInvoiceModel = {
   dueAmount: formula(numeric(12)),
   driveItem: hyperLink(13),
 };
+
+export type EmittedInvoiceType = RowObject<typeof emittedInvoiceModel>;
+
+export const emittedInvoiceSchema = z.object({
+  roundId: z.coerce.number().positive(),
+  date: z.string().refine((p) => !isNaN(new Date(p).getTime()), {
+    message: "Invalid date",
+  }),
+  total: z.coerce.number().positive(),
+  socialSecurityFundRate: z.coerce.number().positive(),
+  vatRate: z.coerce.number().positive(),
+  withholdingTaxRate: z.coerce.number().positive(),
+});
+
+export type NewEmittedInvoiceType = z.infer<typeof emittedInvoiceSchema>;

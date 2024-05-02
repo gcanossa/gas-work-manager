@@ -1,6 +1,26 @@
 import { count, insertAt, read } from "@gasstack/db";
-import { NewActivityTrackType } from "@model/activity-track";
+import { ActivityTrackType, NewActivityTrackType } from "@model/activity-track";
 import { projectCtx, activityCtx, roundCtx } from "@server/contexts";
+
+//TODO: put in gasstack/db
+export type ActivityTrackTypeSerialziable = {
+  [K in keyof ActivityTrackType]: ActivityTrackType[K] extends Date
+    ? string
+    : ActivityTrackType[K] extends Date | null
+      ? string | null
+      : ActivityTrackType[K];
+};
+
+//TODO: put in gasstack/db
+export function activityToSerializable(
+  round: ActivityTrackType,
+): ActivityTrackTypeSerialziable {
+  return {
+    ...round,
+    start: round?.start?.toISOString() ?? null,
+    end: round?.end?.toISOString() ?? null,
+  };
+}
 
 export function trackActivity(obj: NewActivityTrackType) {
   const projects = read(projectCtx);
@@ -24,7 +44,7 @@ export function trackActivity(obj: NewActivityTrackType) {
       },
       newRoundIndex - 1,
       true,
-    )[newRoundIndex];
+    )[0];
   }
 
   insertAt(

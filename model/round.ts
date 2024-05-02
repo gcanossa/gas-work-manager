@@ -29,3 +29,5 @@ export const roundModel = {
   end: nullable(dateTime(4)),
   status: text(5),
 };
+
+export type RoundType = RowObject<typeof roundModel>;

@@ -58,7 +58,7 @@ export function createProject(
     },
     newProjectIndex - 1,
     true,
-  )[newProjectIndex];
+  )[0];
 
   const serviceEnum = read(serviceEnumCtx).map((p) => p.name);
 

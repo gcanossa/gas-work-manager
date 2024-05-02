@@ -5,9 +5,13 @@ import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/shared/spinner";
 import { AlertSuccess, AlertError } from "@/components/shared/alerts";
 
+export type EditFormControl = {
+  setSaved(value: boolean): void;
+};
+
 export type EditFormProp<T extends Record<string, any>> = PropsWithChildren<{
   form: UseFormReturn<T>;
-  onSave: (data: T) => Promise<void>;
+  onSave: (data: T, control: EditFormControl) => Promise<void>;
   onCancel: () => Promise<void>;
   saveText?: string;
   cancelText?: string;
@@ -27,7 +31,11 @@ export function EditForm<T extends Record<string, any>>({
   const [error, setError] = useState<string | null>(null);
 
   const mutation = useMutation({
-    mutationFn: onSave,
+    mutationFn: (data: T) => {
+      return onSave(data, {
+        setSaved,
+      });
+    },
   });
 
   async function onSubmit(values: T) {
