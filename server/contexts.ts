@@ -1,12 +1,13 @@
 import { createContext } from "@gasstack/db";
 import { activityTrackModel } from "@model/activity-track";
+import { emittedInvoiceModel } from "@model/emitted-invoice";
 import { organizationModel } from "@model/organization";
 import { projectModel } from "@model/project";
 import { roundModel } from "@model/round";
 import { serviceEnumModel, serviceModel } from "@model/service";
 import { settingsModel } from "@model/settings";
 
-export const organizationCtx = createContext<typeof organizationModel>(
+export const clientOrgCtx = createContext<typeof organizationModel>(
   SpreadsheetApp.getActive(),
   { rangeName: "Clienti" },
   organizationModel,
@@ -46,4 +47,10 @@ export const roundCtx = createContext<typeof roundModel>(
   SpreadsheetApp.getActive(),
   { rangeName: "Round" },
   roundModel,
+);
+
+export const emittedInvoiceCtx = createContext<typeof emittedInvoiceModel>(
+  SpreadsheetApp.getActive(),
+  { rangeName: "FattureEmesse" },
+  emittedInvoiceModel,
 );

@@ -1,88 +1,61 @@
-import { count, insertAt, read } from "@gasstack/db";
-import { getFolders } from "@gasstack/fs";
+import { insertFirst, insertLast, read } from "@gasstack/db";
+import { getFolderByPath } from "@gasstack/fs";
 import { NewProjectType } from "@model/project";
 import { NewServiceType } from "@model/service";
-import { DriveFoldersNames, SettingsKeys } from "@model/types";
+import { DriveFoldersNames } from "@model/types";
 import {
-  organizationCtx,
+  clientOrgCtx,
   projectCtx,
   serviceCtx,
   serviceEnumCtx,
-  settingsCtx,
 } from "@server/contexts";
+import { getAppRootFolder } from "./server-utils";
 
 export function createProject(
   obj: NewProjectType & {
     services: Omit<NewServiceType, "projectId">[];
   },
 ) {
-  const settings = read(settingsCtx);
+  const clientEntity = read(clientOrgCtx).find((p) => p.id === obj.clientId);
 
-  const driveId = settings.find(
-    (p) => p.key === SettingsKeys.DriveFolder,
-  )!.value;
+  const folderRoot = getAppRootFolder();
 
-  const folders = getFolders(driveId);
+  const projectsFolder = getFolderByPath(folderRoot, [
+    DriveFoldersNames.Projects,
+  ]);
+  const clientProjectsFolder = getFolderByPath(folderRoot, [
+    DriveFoldersNames.Clients,
+    clientEntity!.name,
+    DriveFoldersNames.Projects,
+  ]);
 
-  const clientsFolder = folders.find(
-    (p) => p.getName() === DriveFoldersNames.Clients,
-  );
-  const projectsFolder = folders.find(
-    (p) => p.getName() === DriveFoldersNames.Projects,
-  );
-
-  const clientEntity = read(organizationCtx).find((p) => p.id === obj.clientId);
-
-  const clientEntityFolder = getFolders(clientsFolder!.getId()).find(
-    (p) => p.getName() === clientEntity!.name,
-  );
-  const clientEntityFolders = getFolders(clientEntityFolder!.getId());
-
-  const newFolder = clientEntityFolders
-    .find((p) => p.getName() === DriveFoldersNames.Projects)!
-    .createFolder(`${obj.name}`);
+  const newFolder = clientProjectsFolder!.createFolder(`${obj.name}`);
   projectsFolder!
     .createShortcut(newFolder.getId())
     .setName(`${clientEntity!.name}_${obj.name}`);
 
-  const newProjectIndex = count(projectCtx);
-  const newProject = insertAt(
-    projectCtx,
-    {
-      name: obj.name,
-      clientId: obj.clientId,
-      driveFolder: {
-        url: `https://drive.google.com/drive/folders/${newFolder?.getId()}`,
-        label: "Cartella",
-      },
+  const newProject = insertFirst(projectCtx, {
+    name: obj.name,
+    clientId: obj.clientId,
+    driveFolder: {
+      url: `https://drive.google.com/drive/folders/${newFolder?.getId()}`,
+      label: "Cartella",
     },
-    newProjectIndex - 1,
-    true,
-  )[0];
+  })[0];
 
   const serviceEnum = read(serviceEnumCtx).map((p) => p.name);
 
   for (let item of obj.services) {
     if (!serviceEnum.find((p) => p === item.type)) {
-      insertAt(
-        serviceEnumCtx,
-        { name: item.type },
-        serviceEnum.length - 1,
-        true,
-      );
+      insertLast(serviceEnumCtx, { name: item.type });
       serviceEnum.push(item.type);
     }
 
-    insertAt(
-      serviceCtx,
-      {
-        type: item.type,
-        hourlyRate: item.hourlyRate,
-        projectId: newProject.id,
-      },
-      count(serviceCtx) - 1,
-      true,
-    );
+    insertFirst(serviceCtx, {
+      type: item.type,
+      hourlyRate: item.hourlyRate,
+      projectId: newProject.id,
+    });
   }
 }
 

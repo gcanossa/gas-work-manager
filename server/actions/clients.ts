@@ -1,8 +1,8 @@
-import { count, insertAt, read } from "@gasstack/db";
+import { count, insertAt, insertFirst, read } from "@gasstack/db";
 import { NewOrganizationType, OrganizationType } from "@model/organization";
 import { getFolders } from "@gasstack/fs";
 import { DriveFoldersNames, SettingsKeys } from "@model/types";
-import { organizationCtx, settingsCtx } from "@server/contexts";
+import { clientOrgCtx, settingsCtx } from "@server/contexts";
 
 export function createClient(obj: NewOrganizationType) {
   const newObj: OrganizationType = {
@@ -27,8 +27,8 @@ export function createClient(obj: NewOrganizationType) {
     url: `https://drive.google.com/drive/folders/${newFolder?.getId()}`,
     label: "Cartella",
   };
-  const newIndex = count(organizationCtx);
-  insertAt(organizationCtx, newObj, newIndex - 1, true);
+
+  insertFirst(clientOrgCtx, newObj);
 
   newFolder?.createFolder(DriveFoldersNames.Contracts);
   newFolder?.createFolder(DriveFoldersNames.Projects);
@@ -36,5 +36,5 @@ export function createClient(obj: NewOrganizationType) {
 }
 
 export function getClients() {
-  return read(organizationCtx);
+  return read(clientOrgCtx);
 }

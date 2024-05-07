@@ -8,8 +8,13 @@ import {
   getRoundTotalAmount,
   getRounds,
 } from "./actions/rounds";
+import { getSequences, getSettings, setSequences } from "./actions/settings";
+import { emitInvoice } from "@server/actions/invoices";
 
 const app = {
+  getSequences,
+  setSequences,
+  getSettings,
   createClient,
   getClients,
   createProject,
@@ -20,6 +25,7 @@ const app = {
   getRounds,
   getRoundTotalAmount,
   getRoundActivities,
+  emitInvoice,
 } satisfies ServerRunMethods;
 
 export default app;

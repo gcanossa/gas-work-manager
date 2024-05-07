@@ -32,7 +32,7 @@ export const emittedInvoiceSchema = z.object({
   date: z.string().refine((p) => !isNaN(new Date(p).getTime()), {
     message: "Invalid date",
   }),
-  total: z.coerce.number().positive(),
+  activities: z.array(z.number().min(0)),
   socialSecurityFundRate: z.coerce.number().positive(),
   vatRate: z.coerce.number().positive(),
   withholdingTaxRate: z.coerce.number().positive(),

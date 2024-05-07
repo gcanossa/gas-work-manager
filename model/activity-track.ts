@@ -1,3 +1,4 @@
+import { intervalToHours, numberToPrecision } from "@/lib/utils";
 import {
   numeric,
   text,
@@ -15,13 +16,14 @@ export const activityTrackModel = {
   projectId: numeric(2),
   serviceId: numeric(3),
   clientName: formula(text(4)),
-  serviceName: formula(text(5)),
-  description: text(6),
-  start: dateTime(7),
-  end: dateTime(8),
-  multiplier: numeric(9),
-  billable: boolean(10),
-  hourlyRate: formula(numeric(11)),
+  projectName: formula(text(5)),
+  serviceName: formula(text(6)),
+  description: text(7),
+  start: dateTime(8),
+  end: dateTime(9),
+  multiplier: numeric(10),
+  billable: boolean(11),
+  hourlyRate: formula(numeric(12)),
 };
 
 export const activityTrackSchema = z
@@ -51,3 +53,33 @@ export const activityTrackSchema = z
 
 export type ActivityTrackType = RowObject<typeof activityTrackModel>;
 export type NewActivityTrackType = z.infer<typeof activityTrackSchema>;
+
+export function groupActivitiesByProject(
+  activities: ActivityTrackType[],
+): Record<string, ActivityTrackType[]> {
+  return activities.reduce(
+    (acc, p) => {
+      if (acc[p.projectName] === undefined) acc[p.projectName] = [p];
+      else acc[p.projectName].push(p);
+
+      return acc;
+    },
+    {} as Record<string, ActivityTrackType[]>,
+  );
+}
+
+export function activityAmount(item: ActivityTrackType) {
+  return numberToPrecision(
+    intervalToHours(item.start, item.end, 2) *
+      item.hourlyRate *
+      item.multiplier,
+    2,
+  );
+}
+
+export function activitiesAmount(items: ActivityTrackType[]) {
+  return numberToPrecision(
+    items.reduce((acc, p) => acc + activityAmount(p), 0),
+    2,
+  );
+}

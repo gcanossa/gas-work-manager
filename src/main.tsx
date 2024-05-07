@@ -4,7 +4,7 @@ import "./global.css";
 import App from "./App";
 import { createHashRouter, RouterProvider } from "react-router-dom";
 import client from "@/gas-client";
-import NewInvoice from "./pages/new-invoice";
+import NewEmittedInvoice from "./pages/new-emitted-invoice.tsx";
 import TrackActivity from "./pages/track-activity.tsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { type ClientApi } from "@gasstack/rpc";
@@ -12,6 +12,7 @@ import { type ServerApiType } from "@server";
 import NewClient from "./pages/new-client.tsx";
 import NewProject from "./pages/new-project";
 import { Toaster } from "@/components/ui/sonner";
+import Sequences from "./pages/sequences.tsx";
 declare global {
   interface Window {
     initialRoute: string | null;
@@ -26,8 +27,8 @@ if (client) {
       element: <App />,
       children: [
         {
-          path: "new-invoice",
-          element: <NewInvoice />,
+          path: "new-emitted-invoice",
+          element: <NewEmittedInvoice />,
         },
         {
           path: "new-client",
@@ -40,6 +41,10 @@ if (client) {
         {
           path: "track-activity",
           element: <TrackActivity />,
+        },
+        {
+          path: "sequences",
+          element: <Sequences />,
         },
       ],
     },
