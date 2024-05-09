@@ -31,13 +31,15 @@ export const ActivityTable: React.FC<ActivityTableProps> = ({
 
   return (
     <>
-      <div className="flex items-center space-x-2">
-        <Switch
-          checked={billableOnly}
-          onCheckedChange={() => setBillableOnly((p) => !p)}
-        />
-        <Label>Solo Fatturabili</Label>
-      </div>
+      {activities.filter((p) => !p.billable).length > 0 && (
+        <div className="flex items-center space-x-2 ml-2">
+          <Switch
+            checked={billableOnly}
+            onCheckedChange={() => setBillableOnly((p) => !p)}
+          />
+          <Label>Solo Fatturabili</Label>
+        </div>
+      )}
       <Table className="caption-top">
         <TableCaption>{title}</TableCaption>
         <TableHeader>

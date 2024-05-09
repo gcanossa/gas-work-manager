@@ -8,6 +8,7 @@ import {
   RowObject,
   boolean,
 } from "@gasstack/db";
+import { filter, groupBy, map, pipe, reduce, sortBy, toArray } from "lodash/fp";
 import { z } from "zod";
 
 export const activityTrackModel = {
@@ -54,18 +55,54 @@ export const activityTrackSchema = z
 export type ActivityTrackType = RowObject<typeof activityTrackModel>;
 export type NewActivityTrackType = z.infer<typeof activityTrackSchema>;
 
-export function groupActivitiesByProject(
+export function activitiesToSoldItems(
   activities: ActivityTrackType[],
-): Record<string, ActivityTrackType[]> {
-  return activities.reduce(
-    (acc, p) => {
-      if (acc[p.projectName] === undefined) acc[p.projectName] = [p];
-      else acc[p.projectName].push(p);
+  billableOnly: boolean = true,
+) {
+  return pipe(
+    filter<ActivityTrackType>((p) => !billableOnly || p.billable),
+    map((p) => [
+      p,
+      {
+        duration: intervalToHours(p.start, p.end, 2),
+        unitPrice: p.multiplier * p.hourlyRate,
+      },
+    ]),
+    groupBy<[ActivityTrackType, { duration: number; unitPrice: number }]>(
+      ([p, e]) => `${p.projectId}_${p.serviceId}_${e.unitPrice}`,
+    ),
+    toArray,
+    map(
+      (
+        group: [ActivityTrackType, { duration: number; unitPrice: number }][],
+      ) => {
+        const count = reduce<
+          [ActivityTrackType, { duration: number; unitPrice: number }],
+          number
+        >(
+          (acc, [p, ext]) => acc + (p.billable ? ext.duration : 0),
+          0,
+        )(group);
+        const [first, firstExt] = group[0];
+        const price = firstExt.unitPrice;
 
-      return acc;
-    },
-    {} as Record<string, ActivityTrackType[]>,
-  );
+        return {
+          description: `${first.projectName}: ${first.serviceName}`,
+          unitCount: count,
+          unitPrice: firstExt.unitPrice,
+          totalPrice: numberToPrecision(price * count, 2),
+          activities: group.map(([p]) => p),
+        };
+      },
+    ),
+    sortBy("description"),
+  )(activities) as {
+    description: string;
+    unitCount: number;
+    unitPrice: number;
+    totalPrice: number;
+    activities: ActivityTrackType[];
+  }[];
 }
 
 export function activityAmount(item: ActivityTrackType) {

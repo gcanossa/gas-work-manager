@@ -27,15 +27,23 @@ export const emittedInvoiceModel = {
 
 export type EmittedInvoiceType = RowObject<typeof emittedInvoiceModel>;
 
+export const soldItemSchema = z.object({
+  description: z.string().min(10),
+  unitCount: z.number().min(1),
+  unitPrice: z.number().positive(),
+  totalPrice: z.number().positive(),
+  vatRate: z.number().positive().default(22),
+});
+
+export type NewEmittedInvoiceSoldItemType = z.infer<typeof soldItemSchema>;
+
 export const emittedInvoiceSchema = z.object({
   roundId: z.coerce.number().positive(),
   date: z.string().refine((p) => !isNaN(new Date(p).getTime()), {
     message: "Invalid date",
   }),
   activities: z.array(z.number().min(0)),
-  socialSecurityFundRate: z.coerce.number().positive(),
-  vatRate: z.coerce.number().positive(),
-  withholdingTaxRate: z.coerce.number().positive(),
+  soldItems: z.array(soldItemSchema),
 });
 
 export type NewEmittedInvoiceType = z.infer<typeof emittedInvoiceSchema>;

@@ -4,7 +4,12 @@ import {
   NewEmittedInvoiceType,
   emittedInvoiceSchema,
 } from "@model/emitted-invoice";
-import { useForm, useWatch } from "react-hook-form";
+import {
+  UseFormReturn,
+  useFieldArray,
+  useForm,
+  useWatch,
+} from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { EditForm } from "@/components/shared/edit-form";
 import {
@@ -22,12 +27,102 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import { ActivityTable } from "@/components/shared/activity-table";
 import { Spinner } from "@/components/shared/spinner";
 import { activityFromSerializable } from "@server/actions/client-utils";
 import { useEffect } from "react";
 import { Input } from "@/components/ui/input";
-import { groupActivitiesByProject } from "@model/activity-track";
+import { activitiesToSoldItems } from "@model/activity-track";
+import { Button } from "@/components/ui/button";
+import { CaretSortIcon } from "@radix-ui/react-icons";
+import { cn } from "@/lib/utils";
+
+type SoldItemInputProps = {
+  index: number;
+  form: UseFormReturn<NewEmittedInvoiceType>;
+};
+
+const SoldItemInput: React.FC<SoldItemInputProps> = ({ index, form }) => {
+  return (
+    <div className="flex space-x-2">
+      <FormField
+        control={form.control}
+        name={`soldItems.${index}.description`}
+        render={({ field }) => (
+          <FormItem className="flex-grow">
+            <FormLabel>Descrizione</FormLabel>
+            <FormControl>
+              <Input {...field} placeholder="Descrizione" />
+            </FormControl>
+            <FormDescription></FormDescription>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+      <FormField
+        control={form.control}
+        name={`soldItems.${index}.unitCount`}
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Quantità</FormLabel>
+            <FormControl>
+              <Input {...field} placeholder="Quantità" />
+            </FormControl>
+            <FormDescription></FormDescription>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+      <FormField
+        control={form.control}
+        name={`soldItems.${index}.unitPrice`}
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Prezzo Unitario</FormLabel>
+            <FormControl>
+              <Input {...field} placeholder="Prezzo Unitario" />
+            </FormControl>
+            <FormDescription></FormDescription>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+      <FormField
+        control={form.control}
+        name={`soldItems.${index}.totalPrice`}
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Prezzo Totale</FormLabel>
+            <FormControl>
+              <Input {...field} placeholder="Prezzo Totale" />
+            </FormControl>
+            <FormDescription></FormDescription>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+      <FormField
+        control={form.control}
+        name={`soldItems.${index}.vatRate`}
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Aliquota IVA</FormLabel>
+            <FormControl>
+              <Input {...field} placeholder="Aliquota IVA" />
+            </FormControl>
+            <FormDescription></FormDescription>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+    </div>
+  );
+};
 
 export const NewEmittedInvoice: React.FC = () => {
   const form = useForm<NewEmittedInvoiceType>({
@@ -38,6 +133,7 @@ export const NewEmittedInvoice: React.FC = () => {
     },
   });
 
+  const soldItems = useFieldArray({ control: form.control, name: "soldItems" });
   const rounds = useQuery({
     queryKey: ["rounds"],
     queryFn: async () => (await client!.getRounds())[0],
@@ -59,6 +155,12 @@ export const NewEmittedInvoice: React.FC = () => {
       form.setValue(
         "activities",
         roundActivities.data!.map((p) => p.id),
+      );
+
+      const soldItems = activitiesToSoldItems(roundActivities.data!);
+      form.setValue(
+        "soldItems",
+        soldItems.map((p) => ({ ...p, vatRate: 22 })),
       );
     }
   }, [roundActivities.data]);
@@ -122,15 +224,33 @@ export const NewEmittedInvoice: React.FC = () => {
               <div>Seleziona un Round</div>
             )
           ) : (
-            Object.entries(groupActivitiesByProject(roundActivities.data!)).map(
-              ([k, v]) => (
-                <ActivityTable
-                  key={k}
-                  title={`Attività - ${k}`}
-                  activities={v}
-                />
-              ),
-            )
+            soldItems.fields.map((field, index) => (
+              <div
+                key={field.id}
+                className={cn(
+                  "border rounded p-3",
+                  field.totalPrice === 0 && "bg-slate-100",
+                )}
+              >
+                <SoldItemInput form={form} index={index} />
+                <Collapsible>
+                  <CollapsibleTrigger asChild>
+                    <Button variant="ghost" size="sm">
+                      <span>Dettaglio</span>
+                      <CaretSortIcon className="h-4 w-4" />
+                    </Button>
+                  </CollapsibleTrigger>
+                  <CollapsibleContent>
+                    <div className="mt-3">
+                      <ActivityTable
+                        title={`Attività`}
+                        activities={(field as any).activities}
+                      />
+                    </div>
+                  </CollapsibleContent>
+                </Collapsible>
+              </div>
+            ))
           )}
         </FormItem>
         <FormField
