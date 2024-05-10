@@ -144,7 +144,7 @@ export const NewEmittedInvoice: React.FC = () => {
   const roundActivities = useQuery({
     queryKey: ["roundActivities", roundId],
     queryFn: async () =>
-      (await client!.getRoundActivities(roundId))[0].map(
+      (await client!.getRoundActivities(Number(roundId)))[0].map(
         activityFromSerializable,
       ),
     enabled: roundId !== undefined,
