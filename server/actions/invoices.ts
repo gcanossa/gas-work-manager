@@ -1,4 +1,10 @@
-import { createContext, insertFirst, read, updateAt } from "@gasstack/db";
+import {
+  createContext,
+  insertFirst,
+  querySortedRange,
+  read,
+  updateAt,
+} from "@gasstack/db";
 import { getFolderByPath } from "@gasstack/fs";
 import {
   EmittedInvoiceType,
@@ -52,7 +58,19 @@ export function emitInvoice(invoice: NewEmittedInvoiceType) {
 
   const total = invoice.soldItems.reduce((acc, p) => acc + p.totalPrice, 0);
 
+  const now = new Date();
+  const invoiceCount = querySortedRange(
+    emittedInvoiceCtx,
+    "date",
+    {
+      min: new Date(now.getFullYear(), 0),
+      max: new Date(new Date(now.getFullYear() + 1, 0).getTime() - 1),
+    },
+    "desc",
+  ).length;
+
   const newInvoice = insertFirst(emittedInvoiceCtx, {
+    invoiceNumber: `${invoiceCount + 1}/${now.getFullYear()}`,
     roundId: invoice.roundId,
     date: new Date(invoice.date),
     total: total,
@@ -205,7 +223,7 @@ function createXmlInvoice(
           <TipoDocumento>TD06</TipoDocumento>
           <Divisa>EUR</Divisa>
           <Data>${format(invoice.date, "YYYY-MM-dd")}</Data>
-          <Numero>${invoice.id}/${format(invoice.date, "YYYY")}</Numero>
+          <Numero>${invoice.invoiceNumber}</Numero>
           <DatiRitenuta>
             <TipoRitenuta>RT01</TipoRitenuta>
             <ImportoRitenuta>${invoice.withholdingTaxAmount}</ImportoRitenuta>

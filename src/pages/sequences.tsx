@@ -17,6 +17,11 @@ import { Input } from "@/components/ui/input";
 const model = z.object({
   clients_id: z.coerce.number().min(0),
   projects_id: z.coerce.number().min(0),
+  services_id: z.coerce.number().min(0),
+  rounds_id: z.coerce.number().min(0),
+  activities_id: z.coerce.number().min(0),
+  emittedInvoices_id: z.coerce.number().min(0),
+  moneyTransfers_id: z.coerce.number().min(0),
 });
 
 export const Sequences: React.FC = () => {
@@ -29,7 +34,17 @@ export const Sequences: React.FC = () => {
 
   const form = useForm<z.infer<typeof model>>({
     resolver: zodResolver(model),
-    values: { ...(settings.data?.[0] ?? { clients_id: 0, projects_id: 0 }) },
+    values: {
+      ...(settings.data?.[0] ?? {
+        clients_id: 0,
+        projects_id: 0,
+        services_id: 0,
+        rounds_id: 0,
+        activities_id: 0,
+        emittedInvoices_id: 0,
+        moneyTransfers_id: 0,
+      }),
+    },
   });
 
   return (
@@ -85,6 +100,119 @@ export const Sequences: React.FC = () => {
                     settings.isPending
                       ? "Caricamento..."
                       : "Sequenza Id Progetti"
+                  }
+                />
+              </FormControl>
+              <FormDescription></FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          disabled={settings.isPending}
+          control={form.control}
+          name="services_id"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Sequenza Id Servizi</FormLabel>
+              <FormControl>
+                <Input
+                  type="number"
+                  {...field}
+                  placeholder={
+                    settings.isPending
+                      ? "Caricamento..."
+                      : "Sequenza Id Servizi"
+                  }
+                />
+              </FormControl>
+              <FormDescription></FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          disabled={settings.isPending}
+          control={form.control}
+          name="rounds_id"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Sequenza Id Round</FormLabel>
+              <FormControl>
+                <Input
+                  type="number"
+                  {...field}
+                  placeholder={
+                    settings.isPending ? "Caricamento..." : "Sequenza Id Round"
+                  }
+                />
+              </FormControl>
+              <FormDescription></FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          disabled={settings.isPending}
+          control={form.control}
+          name="activities_id"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Sequenza Id Attività</FormLabel>
+              <FormControl>
+                <Input
+                  type="number"
+                  {...field}
+                  placeholder={
+                    settings.isPending
+                      ? "Caricamento..."
+                      : "Sequenza Id Attività"
+                  }
+                />
+              </FormControl>
+              <FormDescription></FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          disabled={settings.isPending}
+          control={form.control}
+          name="emittedInvoices_id"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Sequenza Id Fattura Emessa</FormLabel>
+              <FormControl>
+                <Input
+                  type="number"
+                  {...field}
+                  placeholder={
+                    settings.isPending
+                      ? "Caricamento..."
+                      : "Sequenza Id Fattura Emessa"
+                  }
+                />
+              </FormControl>
+              <FormDescription></FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          disabled={settings.isPending}
+          control={form.control}
+          name="moneyTransfers_id"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Sequenza Id Movimento</FormLabel>
+              <FormControl>
+                <Input
+                  type="number"
+                  {...field}
+                  placeholder={
+                    settings.isPending
+                      ? "Caricamento..."
+                      : "Sequenza Id Movimento"
                   }
                 />
               </FormControl>

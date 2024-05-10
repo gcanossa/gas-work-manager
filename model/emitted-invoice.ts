@@ -5,24 +5,26 @@ import {
   hyperLink,
   dateTime,
   RowObject,
+  text,
 } from "@gasstack/db";
 import { z } from "zod";
 
 export const emittedInvoiceModel = {
   id: serial(numeric(0)),
-  roundId: numeric(1),
-  date: dateTime(2),
-  total: numeric(3),
-  socialSecurityFundRate: numeric(4),
-  socialSecurityFundAmount: formula(numeric(5)),
-  taxableAmount: formula(numeric(6)),
-  vatRate: numeric(7),
-  vatAmount: formula(numeric(8)),
-  withholdingTaxRate: numeric(9),
-  withholdingTaxAmount: formula(numeric(10)),
-  invoiceAmount: formula(numeric(11)),
-  dueAmount: formula(numeric(12)),
-  driveItem: hyperLink(13),
+  invoiceNumber: text(1),
+  roundId: numeric(2),
+  date: dateTime(3),
+  total: numeric(4),
+  socialSecurityFundRate: numeric(5),
+  socialSecurityFundAmount: formula(numeric(6)),
+  taxableAmount: formula(numeric(7)),
+  vatRate: numeric(8),
+  vatAmount: formula(numeric(9)),
+  withholdingTaxRate: numeric(10),
+  withholdingTaxAmount: formula(numeric(11)),
+  invoiceAmount: formula(numeric(12)),
+  dueAmount: formula(numeric(13)),
+  driveItem: hyperLink(14),
 };
 
 export type EmittedInvoiceType = RowObject<typeof emittedInvoiceModel>;

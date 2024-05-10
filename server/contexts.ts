@@ -1,6 +1,7 @@
 import { createContext } from "@gasstack/db";
 import { activityTrackModel } from "@model/activity-track";
 import { emittedInvoiceModel } from "@model/emitted-invoice";
+import { moneyTransferModel } from "@model/money-transfer";
 import { organizationModel } from "@model/organization";
 import { projectModel } from "@model/project";
 import { roundModel } from "@model/round";
@@ -53,4 +54,10 @@ export const emittedInvoiceCtx = createContext<typeof emittedInvoiceModel>(
   SpreadsheetApp.getActive(),
   { rangeName: "FattureEmesse" },
   emittedInvoiceModel,
+);
+
+export const moneyTransferCtx = createContext<typeof moneyTransferModel>(
+  SpreadsheetApp.getActive(),
+  { rangeName: "Movimenti" },
+  moneyTransferModel,
 );
