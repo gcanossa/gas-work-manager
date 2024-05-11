@@ -66,7 +66,7 @@ export function emitInvoice(invoice: NewEmittedInvoiceType) {
   const total = invoice.soldItems.reduce((acc, p) => acc + p.totalPrice, 0);
 
   const newInvoice = insertFirst(emittedInvoiceCtx, {
-    invoiceNumber: `${invoiceCount + 1}/${now.getFullYear()}`,
+    invoiceNumber: `${invoiceNumber}`,
     roundId: invoice.roundId,
     date: new Date(invoice.date),
     total: total,

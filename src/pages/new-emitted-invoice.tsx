@@ -174,10 +174,7 @@ export const NewEmittedInvoice: React.FC = () => {
         onSave={async (newInvoice: NewEmittedInvoiceType) => {
           const [result] = await client!.emitInvoice(newInvoice);
 
-          const link = document.createElement("a");
-          link.href = result.url;
-          link.download = result.name;
-          link.click();
+          window.open(result.url, "_blank");
 
           setTimeout(() => window.google.script.host.close(), 2000);
         }}
