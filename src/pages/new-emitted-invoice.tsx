@@ -136,7 +136,7 @@ export const NewEmittedInvoice: React.FC = () => {
   const soldItems = useFieldArray({ control: form.control, name: "soldItems" });
   const rounds = useQuery({
     queryKey: ["rounds"],
-    queryFn: async () => (await client!.getRounds())[0], //.filter((p) => p.end === null),
+    queryFn: async () => (await client!.getRounds())[0].filter((p) => !p.end),
   });
 
   const roundId = useWatch({ control: form.control, name: "roundId" });
