@@ -136,7 +136,8 @@ export const NewEmittedInvoice: React.FC = () => {
   const soldItems = useFieldArray({ control: form.control, name: "soldItems" });
   const rounds = useQuery({
     queryKey: ["rounds"],
-    queryFn: async () => (await client!.getRounds())[0],
+    queryFn: async () =>
+      (await client!.getRounds())[0].filter((p) => p.end === null),
   });
 
   const roundId = useWatch({ control: form.control, name: "roundId" });
@@ -172,7 +173,12 @@ export const NewEmittedInvoice: React.FC = () => {
       <EditForm
         form={form}
         onSave={async (newInvoice: NewEmittedInvoiceType) => {
-          await client!.emitInvoice(newInvoice);
+          const [result] = await client!.emitInvoice(newInvoice);
+
+          const link = document.createElement("a");
+          link.href = result.url;
+          link.download = result.name;
+          link.click();
 
           setTimeout(() => window.google.script.host.close(), 2000);
         }}

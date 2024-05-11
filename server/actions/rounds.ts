@@ -6,6 +6,7 @@ import {
   activityToSerializable,
   roundToSerializable,
 } from "./client-utils";
+import { format } from "date-fns";
 
 export function getRounds() {
   return read(roundCtx).map(roundToSerializable);
@@ -20,7 +21,7 @@ export function getRoundActivities(
     activityCtx,
     "start",
     {
-      min: round!.start,
+      min: new Date(format(round!.start, "yyyy-MM-dd")),
     },
     "desc",
   );

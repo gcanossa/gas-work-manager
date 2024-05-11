@@ -12,7 +12,7 @@
     "preview": "vite preview -c vite.config.client.ts"
   },
   "dependencies": {
-    "@gasstack/db": "^0.3.2",
+    "@gasstack/db": "^0.3.3",
     "@gasstack/fs": "^0.4.0",
     "@gasstack/kv": "^0.3.1",
     "@gasstack/manifest": "^0.3.1",
@@ -49,7 +49,7 @@
     "@types/google-apps-script": "^1.0.83",
     "@types/lodash": "^4.17.1",
     "@types/node": "^20.12.11",
-    "@types/react": "^18.3.1",
+    "@types/react": "^18.3.2",
     "@types/react-dom": "^18.3.0",
     "@typescript-eslint/eslint-plugin": "^7.8.0",
     "@typescript-eslint/parser": "^7.8.0",
