@@ -33,7 +33,7 @@ export function emitInvoice(invoice: NewEmittedInvoiceType) {
     },
     "desc",
   ).length;
-  const invoiceNumber = `${invoiceCount + 1}/${now.getFullYear()}`;
+  const invoiceNumber = `${invoiceCount + 1}_${now.getFullYear()}`;
 
   const activities = getRoundActivities(round!.id)
     .filter((p) => p.billable && invoice.activities.includes(p.id))
@@ -56,7 +56,7 @@ export function emitInvoice(invoice: NewEmittedInvoiceType) {
   ]);
 
   const newFolder = clientEmitteInvoicesFolder!.createFolder(
-    `${round!.id}_${invoiceNumber}`,
+    `${round!.id}@${invoiceNumber}`,
   );
 
   emittedInvoicesFolder!
@@ -66,7 +66,7 @@ export function emitInvoice(invoice: NewEmittedInvoiceType) {
   const total = invoice.soldItems.reduce((acc, p) => acc + p.totalPrice, 0);
 
   const newInvoice = insertFirst(emittedInvoiceCtx, {
-    invoiceNumber: `${invoiceNumber}`,
+    invoiceNumber: invoiceNumber,
     roundId: invoice.roundId,
     date: new Date(invoice.date),
     total: total,
@@ -134,13 +134,13 @@ export function emitInvoice(invoice: NewEmittedInvoiceType) {
   );
 
   //TODO: create invoice xml from template
-  const downloadUrl = newFolder
-    .createFile(
-      "Base_Fattura.xml",
-      createXmlInvoice(client!, settings, invoice.soldItems, newInvoice),
-    )
-    .moveTo(newFolder)
-    .getDownloadUrl();
+  // const downloadUrl = newFolder
+  //   .createFile(
+  //     "Base_Fattura.xml",
+  //     createXmlInvoice(client!, settings, invoice.soldItems, newInvoice),
+  //   )
+  //   .moveTo(newFolder)
+  //   .getDownloadUrl();
 
-  return { url: downloadUrl, name: "Base_Fattura.xml" };
+  // return { url: downloadUrl, name: "Base_Fattura.xml" };
 }

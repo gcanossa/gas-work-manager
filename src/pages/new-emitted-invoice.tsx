@@ -172,9 +172,10 @@ export const NewEmittedInvoice: React.FC = () => {
       <EditForm
         form={form}
         onSave={async (newInvoice: NewEmittedInvoiceType) => {
-          const [result] = await client!.emitInvoice(newInvoice);
+          // const [result] =
+          await client!.emitInvoice(newInvoice);
 
-          window.open(result.url, "_blank");
+          // window.open(result.url, "_blank");
 
           setTimeout(() => window.google.script.host.close(), 2000);
         }}
